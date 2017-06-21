@@ -55,4 +55,4 @@ function calculateRate(weight, type, callback) {
 	callback(null, params);
 }
 
-module.exports = {calculatePostage: calculatePostage};
+module.exports = {calculateRate: calculateRate};
