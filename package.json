@@ -18,6 +18,6 @@
   "homepage": "https://github.com/ecollett1/cs313Node#readme",
   "engines": {
     "node": "6.11.0",
-    "npm": "3.10.0"
+    "npm": "3.10.10"
   }
 }
