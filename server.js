@@ -1,7 +1,13 @@
+const http = require('http');
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var postage = require('./postage.js');
+
+let server = http.createServer(function(req, res) {
+	res.write("Done!");
+	res.end();
+});
 
 app.set('port', (process.env.PORT || 5000));
 
