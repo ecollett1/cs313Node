@@ -1,13 +1,7 @@
-const http = require('http');
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var postage = require('./postage.js');
-
-let server = http.createServer(function(req, res) {
-	res.write("Done!");
-	res.end();
-});
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -32,6 +26,6 @@ app.get('/postage', function(req, res) {
 	});
 });
 
-server.listen(app.get('port'), function() {
+app.listen(app.get('port'), function() {
   	console.log('Node app is running on port', app.get('port'));
 });
