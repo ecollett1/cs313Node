@@ -1,0 +1,19 @@
+{
+  "name": "cs313-node",
+  "version": "1.0.0",
+  "description": "Repository for Node.js applications",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ecollett1/cs313Node.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ecollett1/cs313Node/issues"
+  },
+  "homepage": "https://github.com/ecollett1/cs313Node#readme"
+}
