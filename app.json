@@ -1,0 +1,6 @@
+{
+  "name": "Basic Application",
+  "description": "A barebones Node.js app using Express 4",
+  "repository": "https://github.com/ecollett1/cs313-php/tree/master/web/SecondProject",
+  "keywords": ["node", "express", "heroku"]
+}
