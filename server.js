@@ -17,11 +17,11 @@ app.get('/', function (request, response) {
     response.sendFile(__dirname + '/public/home.html');
 });
 
-app.get('/letter.html', function(request, response) {
+app.get('/letter', function(request, response) {
   	response.sendFile(__dirname + '/public/letter.html');
 });
 
-app.get('/project.html', function (request, response) {
+app.get('/project', function (request, response) {
     response.sendFile(__dirname + '/public/letter.html');
 });
 
