@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({ extended: true}));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
-app.get('/', function(request, response) {
+app.get('/letter.html', function(request, response) {
   	response.sendFile(__dirname + '/public/letter.html');
 });
 
