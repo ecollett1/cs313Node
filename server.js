@@ -106,7 +106,7 @@ app.get('/letter', function(request, response) {
 });
 
 app.get('/project', function (request, response) {
-    response.sendFile(__dirname + '/public/letter.html');
+    response.sendFile(__dirname + '/public/project.html');
 });
 
 app.get('/postage', function(req, res) {
