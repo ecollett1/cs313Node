@@ -7,7 +7,6 @@ app.post('/math', function(req, res) {
 	function showResult(err, result) {
 		if (err == null) {
 			res.render('public/results');
-			
 		}
 		else {
 			res.sendFile(__dirname + '/public/static.html');
