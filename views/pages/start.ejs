@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<% include ../partials/header.ejs %>
+</head>
+<body>
+  <h1 class="text-center">Create Your Own Businesscard</h1>
+	<table>
+	  <td>
+			<label for="email">Email: </label>
+			<input type="text" onkeyup="update('email', this.id)" id="email1" name="email"> <br>
+		</td>
+		<td>
+			<label for="business">Position: </label>
+			<input type="text" onkeyup="update('business', this.id)" id="business1" name="business"> <br>
+		</td>
+		<td>
+			<label for="name">Name: </label>
+			<input type="text" onkeyup="update('name', this.id)" id="name1" name="name"> <br>
+		</td>
+		<td>
+			<label for="phone">Phone: </label>
+			<input type="text" onkeyup="update('phone', this.id)" id="phone1" name="phone"> <br>
+		</td>
+		<td>
+			<label for="Address">Address: </label>
+			<input type="text" onkeyup="update('address', this.id)" id="address1"> <br>
+		</td>
+		<td>
+			<label for="name">Fax(Optional): </label>
+			<input type="text" onkeyup="update('fax', this.id)" id="fax1"> <br>
+		</td>
+	</table>
+	<br>
+	<div id="button-container" class="center">
+		<button type="button" onclick="editUser()" >Complete</button>
+	</div>
+	<br><br>
+	<div class="card" id="card">
+		<div id="name"></div>
+		<div id="email"></div>
+		<div id="phone"></div>
+		<div id="address"></div>
+		<div id="fax"></div>
+		<div id="business"></div>
+		<img class="center" style="width:100%" src="https://fthmb.tqn.com/uuHGX7sDZeBw9zB4beG8F5ZOfzo=/768x0/filters:no_upscale()/about/printing-for-less-business-card-template-579bd0795f9b589aa97416dc.png">
+	</div>
+</body>
+</html>

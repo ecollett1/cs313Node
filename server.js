@@ -26,6 +26,23 @@ app.get('/', function (request, response) {
     response.sendFile(__dirname + '/public/home.html');
 });
 
+app.get('/letter', function(request, response) {
+  	response.sendFile(__dirname + '/public/letter.html');
+});
+
+app.get('/project', function (request, response) {
+    response.render('pages/start');
+});
+
+app.get('/postage', function(req, res) {
+	var weight = req.query.weight;
+	var type = req.query.letterType;
+
+	postage.calculateRate(weight, type, function(error, results) {
+		res.render("pages/results", results);
+	});
+});
+
 app.get('/getTemplate', function(req, response){
 	var id = req.query.id;
 	if (id) {
@@ -33,7 +50,7 @@ app.get('/getTemplate', function(req, response){
 	  	if (err) {
 	    	throw err;
 	  	}
-		
+
 		console.log('Person:', res.rows);
 		response.send(JSON.stringify(res.rows));
 		response.end();
@@ -43,7 +60,7 @@ app.get('/getTemplate', function(req, response){
 	  	if (err) {
 	    	throw err;
 	  	}
-		
+
 		console.log('Template:', res.rows);
 		response.send(JSON.stringify(res.rows));
 		response.end();
@@ -58,7 +75,7 @@ app.get('/getUser', function(req, response){
 	  	if (err) {
 	    	throw err;
 	  	}
-		
+
 		console.log('Card:', res.rows);
 		response.send(JSON.stringify(res.rows));
 		response.end();
@@ -83,7 +100,7 @@ app.get('/editUser', function(req, response){
 	  	if (err) {
 	    	throw err;
 	  	}
-		
+
 		console.log('Card:', res.rows);
 		response.send(JSON.stringify(res.rows));
 		response.end();
@@ -99,23 +116,6 @@ app.get('/editUser', function(req, response){
 		response.end();
 		});
 	}
-});
-
-app.get('/letter', function(request, response) {
-  	response.sendFile(__dirname + '/public/letter.html');
-});
-
-app.get('/project', function (request, response) {
-    response.sendFile(__dirname + '/public/project.html');
-});
-
-app.get('/postage', function(req, res) {
-	var weight = req.query.weight;
-	var type = req.query.letterType;
-
-	postage.calculateRate(weight, type, function(error, results) {
-		res.render("pages/results", results);
-	});
 });
 
 app.listen(app.get('port'), function() {
