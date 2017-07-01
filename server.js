@@ -95,8 +95,10 @@ app.get('/getUser', function(req, response){
 
 app.get('/editUser', function(req, response){
 	var id = req.query.id;
+  console.log(req.query.company, req.query.address, req.query.fax);
 	if (id) {
-		pool.query('SELECT * FROM card WHERE id = ' + id, (err, res) => {
+		pool.query('UPDATE card SET name = ' + req.query.name + ', position = ' + req.query.business
+    + ' WHERE email = ' + req.query.email, (err, res) => {
 	  	if (err) {
 	    	throw err;
 	  	}
@@ -106,17 +108,33 @@ app.get('/editUser', function(req, response){
 		response.end();
 		});
 	} else {
-		pool.query('SELECT * FROM card WHERE id = 2', (err, res) => {
+		pool.query('UPDATE card SET name = \'' + req.query.name
+     + '\', position = \'' + req.query.business
+     + '\', phone = \'' + req.query.phone
+     + '\', company = \'' + req.query.company
+     + '\', address = \'' + req.query.address
+     + '\', fax = \'' + req.query.fax
+     + '\' WHERE email = \'' + req.query.email + '\'', (err, res) => {
 	  	if (err) {
 	    	throw err;
 	  	}
 
-		console.log('Card:', config);
-		response.send(JSON.stringify(res.rows));
+		console.log('Card:', res.rows);
+    response.render('pages/start');
 		response.end();
-		});
+  });
 	}
 });
+
+function editUser() {
+	pool.query('SELECT * FROM card'), (err, res) => {
+    if (err) {
+      throw err;
+    }
+    console.log('Template:', res.rows);
+		response.send(JSON.stringify(res.rows));
+  };
+}
 
 app.listen(app.get('port'), function() {
   	console.log('Node app is running on port', app.get('port'));
