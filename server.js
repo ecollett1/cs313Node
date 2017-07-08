@@ -3,6 +3,7 @@ var app = express();
 var bodyParser = require('body-parser');
 var postage = require('./postage.js');
 const { Pool } = require('pg');
+var id;
 
 const pool = new Pool({
   user: 'postgres',
@@ -30,9 +31,9 @@ app.get('/letter', function(request, response) {
   	response.sendFile(__dirname + '/public/letter.html');
 });
 
-app.get('/project', function (request, response) {
-    response.render('pages/start');
-});
+// app.get('/project', function (request, response) {
+//     response.render('pages/start');
+// });
 
 app.get('/postage', function(req, res) {
 	var weight = req.query.weight;
@@ -43,41 +44,17 @@ app.get('/postage', function(req, res) {
 	});
 });
 
-app.get('/getTemplate', function(req, response){
-	var id = req.query.id;
-	if (id) {
-		pool.query('SELECT * FROM template WHERE id = ' + id, (err, res) => {
-	  	if (err) {
-	    	throw err;
-	  	}
-
-		console.log('Person:', res.rows);
-		response.send(JSON.stringify(res.rows));
-		response.end();
-		});
-	} else {
-		pool.query('SELECT * FROM template WHERE id = 1', (err, res) => {
-	  	if (err) {
-	    	throw err;
-	  	}
-
-		console.log('Template:', res.rows);
-		response.send(JSON.stringify(res.rows));
-		response.end();
-		});
-	}
-});
-
 app.get('/getUser', function(req, response){
-	var id = req.query.id;
-	if (id) {
-		pool.query('SELECT * FROM card WHERE id = ' + id, (err, res) => {
+	var email = req.query.username;
+  console.log('Email:', email);
+	if (email) {
+		pool.query('SELECT * FROM card WHERE email = \'' + email + '\'', (err, res) => {
 	  	if (err) {
 	    	throw err;
 	  	}
-
-		console.log('Card:', res.rows);
-		response.send(JSON.stringify(res.rows));
+      id = res.rows[0].id;
+		console.log('User Information:', res.rows[0]);
+    response.render('pages/start', res.rows[0]);
 		response.end();
 		});
 	} else {
@@ -85,26 +62,30 @@ app.get('/getUser', function(req, response){
 	  	if (err) {
 	    	throw err;
 	  	}
-
-		console.log('Card:', config);
-		response.send(JSON.stringify(res.rows));
+      id = 2;
+		console.log('Card:', res.rows[0]);
+		response.render('pages/start', res.rows[0]);
 		response.end();
 		});
 	}
 });
 
 app.get('/editUser', function(req, response){
-	var id = req.query.id;
-  console.log(req.query.company, req.query.address, req.query.fax);
+  console.log('ID:', id);
 	if (id) {
-		pool.query('UPDATE card SET name = ' + req.query.name + ', position = ' + req.query.business
-    + ' WHERE email = ' + req.query.email, (err, res) => {
+    pool.query('UPDATE card SET name = \'' + req.query.name
+     + '\', position = \'' + req.query.business
+     + '\', phone = \'' + req.query.phone
+     + '\', company = \'' + req.query.company
+     + '\', address = \'' + req.query.address
+     + '\', fax = \'' + req.query.fax
+     + '\' WHERE id = ' + id, (err, res) => {
 	  	if (err) {
 	    	throw err;
 	  	}
 
-		console.log('Card:', res.rows);
-		response.send(JSON.stringify(res.rows));
+		console.log('Card:', req.query);
+		response.render('pages/start', req.query);
 		response.end();
 		});
 	} else {
@@ -119,22 +100,12 @@ app.get('/editUser', function(req, response){
 	    	throw err;
 	  	}
 
-		console.log('Card:', res.rows);
-    response.render('pages/start');
+		console.log('Card:', req.query);
+    response.render('pages/start', req.query);
 		response.end();
   });
 	}
 });
-
-function editUser() {
-	pool.query('SELECT * FROM card'), (err, res) => {
-    if (err) {
-      throw err;
-    }
-    console.log('Template:', res.rows);
-		response.send(JSON.stringify(res.rows));
-  };
-}
 
 app.listen(app.get('port'), function() {
   	console.log('Node app is running on port', app.get('port'));

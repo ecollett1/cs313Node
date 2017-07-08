@@ -4,39 +4,45 @@
 	<% include ../partials/header.ejs %>
 </head>
 <body>
-  <h1 class="text-center">Create Your Own Businesscard</h1>
+	<form action="/getUser" method="get">
+		<label for="username">Email: </label>
+		<input type="text" id="username" name="username"> <br><br>
+		<input type="submit" name="submit1" class="button" value="Get My Information"> <br>
+	</form>
+
 	<form action="/editUser" method="get">
+  <h1 class="text-center">Create Your Own Businesscard</h1>
 	<table>
 		<tr>
 			<td>
 			<label for="name">Name: </label>
-			<input type="text" onkeyup="update('name', this.id)" id="name1" name="name"> <br>
+			<input type="text" onkeyup="update('name', this.id)" id="name1" name="name" value="<%= name %>"> <br>
 		</td>
 	  <td>
 			<label for="email">Email: </label>
-			<input type="text" onkeyup="update('email', this.id)" id="email1" name="email"> <br>
+			<input type="text" onkeyup="update('email', this.id)" id="email1" name="email" value="<%= email %>"> <br>
 		</td>
 		<td>
-			<label for="business">Position: </label>
-			<input type="text" onkeyup="update('business', this.id)" id="business1" name="business"> <br>
+			<label for="position">Position: </label>
+			<input type="text" onkeyup="update('position', this.id)" id="position1" name="position" value="<%= position %>"> <br>
 		</td>
 		<td>
 			<label for="phone">Phone: </label>
-			<input type="text" onkeyup="update('phone', this.id)" id="phone1" name="phone"> <br>
+			<input type="text" onkeyup="update('phone', this.id)" id="phone1" name="phone" value="<%= phone %>"> <br>
 		</td>
 	</tr>
 	<tr>
 		<td>
 			<label for="Address">Address: </label>
-			<input type="text" onkeyup="update('address', this.id)" id="address1" name="address"> <br>
+			<input type="text" onkeyup="update('address', this.id)" id="address1" name="address" value="<%= address %>"> <br>
 		</td>
 		<td>
 			<label for="name">Fax(Optional): </label>
-			<input type="text" onkeyup="update('fax', this.id)" id="fax1" name="fax"> <br>
+			<input type="text" onkeyup="update('fax', this.id)" id="fax1" name="fax" value="<%= fax %>"> <br>
 		</td>
 		<td>
 			<label for="name">Company: </label>
-			<input type="text" onkeyup="update('company', this.id)" id="company1" name="company"> <br>
+			<input type="text" onkeyup="update('company', this.id)" id="company1" name="company" value="<%= company %>"> <br>
 		</td>
 	</tr>
 	</table>
@@ -47,13 +53,13 @@
 </form>
 	<br><br>
 	<div class="card fixed" id="card">
-		<div id="name">Name</div>
-		<div id="email">Email:</div>
-		<div id="phone">Phone:</div>
-		<div id="address">Address</div>
-		<div id="fax">Fax:</div>
-		<div id="business">Position</div>
-		<div id="company">Company Name</div>
+		<div id="name"><%= name %> </div>
+		<div id="email"><%= email %> </div>
+		<div id="phone"><%= phone %> </div>
+		<div id="address"><%= address %> </div>
+		<div id="fax">Fax:<%= fax %></div>
+		<div id="position"><%= position %> </div>
+		<div id="company"><%= company %> </div>
 		<img class="center" style="width:100%" src="https://fthmb.tqn.com/uuHGX7sDZeBw9zB4beG8F5ZOfzo=/768x0/filters:no_upscale()/about/printing-for-less-business-card-template-579bd0795f9b589aa97416dc.png">
 	</div>
 </body>
