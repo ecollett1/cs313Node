@@ -8,13 +8,13 @@ var pg = require('pg');
 
 pg.defaults.ssl = true;
 
-// const pool = new Pool({
-//   user: 'postgres',
-//   host: 'localhost',
-//   database: 'businesscard',
-//   password: 'sh0m0mm@',
-//   port: 5432
-// });
+const pool = new Pool({
+  user: 'postgres',
+  host: 'localhost',
+  database: 'businesscard',
+  password: 'sh0m0mm@',
+  port: 5432
+});
 
 app.set('port', (process.env.PORT || 5000));
 
