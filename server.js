@@ -67,6 +67,8 @@ app.get('/getUser', function(req, response){
       client.query('SELECT * FROM card WHERE email = \'' + email + '\';')
       .on('row', function(row) {
             console.log(JSON.stringify(row));
+            response.render('pages/start', row);
+            response.end();
           });
       });
     } else {
@@ -87,6 +89,8 @@ app.get('/getUser', function(req, response){
     .on('row', function(row) {
       id = 2;
       console.log(JSON.stringify(row));
+      response.render('pages/start', row);
+      response.end();
     });
   });
 	}
