@@ -4,14 +4,17 @@ var bodyParser = require('body-parser');
 var postage = require('./postage.js');
 const { Pool } = require('pg');
 var id;
+var pg = require('pg');
 
-const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'businesscard',
-  password: 'sh0m0mm@',
-  port: 5432
-});
+pg.defaults.ssl = true;
+
+// const pool = new Pool({
+//   user: 'postgres',
+//   host: 'localhost',
+//   database: 'businesscard',
+//   password: 'sh0m0mm@',
+//   port: 5432
+// });
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -48,25 +51,41 @@ app.get('/getUser', function(req, response){
 	var email = req.query.username;
   console.log('Email:', email);
 	if (email) {
-		pool.query('SELECT * FROM card WHERE email = \'' + email + '\'', (err, res) => {
-	  	if (err) {
-	    	throw err;
-	  	}
-      id = res.rows[0].id;
-		console.log('User Information:', res.rows[0]);
-    response.render('pages/start', res.rows[0]);
-		response.end();
-		});
-	} else {
-		pool.query('SELECT * FROM card WHERE id = 2', (err, res) => {
-	  	if (err) {
-	    	throw err;
-	  	}
+		// pool.query('SELECT * FROM card WHERE email = \'' + email + '\'', (err, res) => {
+	  // 	if (err) {
+	  //   	throw err;
+	  // 	}
+    //   id = res.rows[0].id;
+		// console.log('User Information:', res.rows[0]);
+    // response.render('pages/start', res.rows[0]);
+		// response.end();
+		// });
+    pg.connect(process.env.DATABASE_URL, function(err, client) {
+      if (err) throw err;
+      console.log('Connected to postgres! Getting schemas...');
+
+      client
+          .query('SELECT * FROM card WHERE email = \'' + email + '\';')
+          .on('row', function(row) {
+            console.log(JSON.stringify(row));
+          });
+      });
+    } else {
+		// pool.query('SELECT * FROM card WHERE id = 2', (err, res) => {
+	  // 	if (err) {
+	  //   	throw err;
+	  // 	}
+    //   id = 2;
+		// console.log('Card:', res.rows[0]);
+		// response.render('pages/start', res.rows[0]);
+		// response.end();
+		// });
+    client
+    .query('SELECT * FROM card WHERE id = 2;')
+    .on('row', function(row) {
       id = 2;
-		console.log('Card:', res.rows[0]);
-		response.render('pages/start', res.rows[0]);
-		response.end();
-		});
+      console.log(JSON.stringify(row));
+    });
 	}
 });
 
