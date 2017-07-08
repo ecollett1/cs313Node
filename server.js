@@ -44,8 +44,7 @@ app.get('/postage', function(req, res) {
 });
 
 app.get('/getUser', function(req, response){
-	var email = req.query.username;
-  console.log("This is supposed to be showing.");
+	var email;
   console.log('Email:', email);
 	if (email) {
 		// pool.query('SELECT * FROM card WHERE email = \'' + email + '\'', (err, res) => {
