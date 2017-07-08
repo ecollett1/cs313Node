@@ -44,7 +44,7 @@ app.get('/postage', function(req, res) {
 });
 
 app.get('/getUser', function(req, response){
-	var email;
+	var email = req.query.username
   console.log('Email:', email);
 	if (email) {
 		// pool.query('SELECT * FROM card WHERE email = \'' + email + '\'', (err, res) => {
@@ -86,7 +86,11 @@ app.get('/getUser', function(req, response){
       response.render('pages/start');
       response.end();
     });
+    response.render('pages/start');
+    response.end();
   });
+  response.render('pages/start');
+  response.end();
 	}
   response.render('pages/start');
   response.end();
