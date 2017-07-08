@@ -34,10 +34,6 @@ app.get('/letter', function(request, response) {
   	response.sendFile(__dirname + '/public/letter.html');
 });
 
-// app.get('/project', function (request, response) {
-//     response.render('pages/start');
-// });
-
 app.get('/postage', function(req, res) {
 	var weight = req.query.weight;
 	var type = req.query.letterType;
@@ -93,6 +89,8 @@ app.get('/getUser', function(req, response){
     });
   });
 	}
+  response.render('pages/start');
+  response.end();
 });
 
 app.get('/editUser', function(req, response){
