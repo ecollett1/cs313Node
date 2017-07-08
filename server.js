@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var postage = require('./postage.js');
-//const { Pool } = require('pg');
+const { Pool } = require('pg');
 var id;
 var pg = require('pg');
 
@@ -48,7 +48,7 @@ app.get('/postage', function(req, res) {
 });
 
 app.get('/getUser', function(req, response){
-	// var email = req.query.username;
+	var email = req.query.username;
   console.log('Email:', email);
 	if (email) {
 		// pool.query('SELECT * FROM card WHERE email = \'' + email + '\'', (err, res) => {
@@ -79,11 +79,16 @@ app.get('/getUser', function(req, response){
 		// response.render('pages/start', res.rows[0]);
 		// response.end();
 		// });
+    pg.connect(process.env.DATABASE_URL, function(err, client) {
+      if (err) throw err;
+      console.log('Connected to postgres! Getting schemas...');
+
     client.query('SELECT * FROM card WHERE id = 2;')
     .on('row', function(row) {
       id = 2;
       console.log(JSON.stringify(row));
     });
+  });
 	}
 });
 
