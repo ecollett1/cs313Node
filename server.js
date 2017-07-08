@@ -48,7 +48,7 @@ app.get('/postage', function(req, res) {
 });
 
 app.get('/getUser', function(req, response){
-	var email = req.query.username;
+	// var email = req.query.username;
   console.log('Email:', email);
 	if (email) {
 		// pool.query('SELECT * FROM card WHERE email = \'' + email + '\'', (err, res) => {
@@ -64,9 +64,8 @@ app.get('/getUser', function(req, response){
       if (err) throw err;
       console.log('Connected to postgres! Getting schemas...');
 
-      client
-          .query('SELECT * FROM card WHERE email = \'' + email + '\';')
-          .on('row', function(row) {
+      client.query('SELECT * FROM card WHERE email = \'' + email + '\';')
+      .on('row', function(row) {
             console.log(JSON.stringify(row));
           });
       });
@@ -80,8 +79,7 @@ app.get('/getUser', function(req, response){
 		// response.render('pages/start', res.rows[0]);
 		// response.end();
 		// });
-    client
-    .query('SELECT * FROM card WHERE id = 2;')
+    client.query('SELECT * FROM card WHERE id = 2;')
     .on('row', function(row) {
       id = 2;
       console.log(JSON.stringify(row));
