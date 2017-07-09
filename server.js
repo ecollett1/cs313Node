@@ -5,8 +5,9 @@ var postage = require('./postage.js');
 const { Pool } = require('pg');
 var id;
 var pg = require('pg');
-pg.defaults.ssl = true;
 var connectionString = "postgres://*ericmichaelcollett@gmail.com*:*sh0m0mm@*@*ec2-23-21-220-188.compute-1.amazonaws.com*:*5432";
+
+pg.defaults.ssl = true;
 
 const pool = new Pool({
   user: 'postgres',
@@ -27,7 +28,8 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
 app.get('/', function (request, response) {
-    response.sendFile(__dirname + '/public/home.html');
+    response.render('pages/start');
+    response.end();
 });
 
 app.get('/letter', function(request, response) {
@@ -56,7 +58,7 @@ app.get('/getUser', function(req, response){
     // response.render('pages/start', res.rows[0]);
 		// response.end();
 		// });
-    pg.connect(connectionString, function(err, client) {
+    pg.connect(process.env.DATABASE_URL, function(err, client) {
       if (err) throw err;
       console.log('Connected to postgres! Getting schemas...');
 
@@ -76,7 +78,7 @@ app.get('/getUser', function(req, response){
 		// response.render('pages/start', res.rows[0]);
 		// response.end();
 		// });
-    pg.connect(connectionString, function(err, client) {
+    pg.connect(process.env.DATABASE_URL, function(err, client) {
       if (err) throw err;
       console.log('Connected to postgres! Getting schemas...');
 
