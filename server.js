@@ -5,8 +5,8 @@ var postage = require('./postage.js');
 const { Pool } = require('pg');
 var id;
 var pg = require('pg');
-var connectionString = "postgres://*ericmichaelcollett@gmail.com*:*sh0m0mm@*@*ec2-23-21-220-188.compute-1.amazonaws.com*:*5432:/*DATABASE*";
 pg.defaults.ssl = true;
+var connectionString = "postgres://*ericmichaelcollett@gmail.com*:*sh0m0mm@*@*ec2-23-21-220-188.compute-1.amazonaws.com*:*5432";
 
 const pool = new Pool({
   user: 'postgres',
@@ -56,7 +56,7 @@ app.get('/getUser', function(req, response){
     // response.render('pages/start', res.rows[0]);
 		// response.end();
 		// });
-    pg.connect("postgres://enycpaoqjgtnst:5f9a874d5fb0d7a4c346fe28f67b1036cc6bb4a01f84c30cfbe32739aaaf8907@ec2-23-21-220-188.compute-1.amazonaws.com:5432/d22cdb5iito5vk", function(err, client) {
+    pg.connect(connectionString, function(err, client) {
       if (err) throw err;
       console.log('Connected to postgres! Getting schemas...');
 
@@ -76,7 +76,7 @@ app.get('/getUser', function(req, response){
 		// response.render('pages/start', res.rows[0]);
 		// response.end();
 		// });
-    pg.connect("postgres://enycpaoqjgtnst:5f9a874d5fb0d7a4c346fe28f67b1036cc6bb4a01f84c30cfbe32739aaaf8907@ec2-23-21-220-188.compute-1.amazonaws.com:5432/d22cdb5iito5vk", function(err, client) {
+    pg.connect(connectionString, function(err, client) {
       if (err) throw err;
       console.log('Connected to postgres! Getting schemas...');
 
