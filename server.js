@@ -7,6 +7,19 @@ var id;
 var pg = require('pg');
 
 pg.defaults.ssl = true;
+var row1;
+
+pg.connect(process.env.DATABASE_URL, function(err, client) {
+  if (err) throw err;
+  console.log('Connected to postgres! Getting schemas...');
+
+  client
+    .query('SELECT table_schema,table_name FROM information_schema.tables;')
+    .on('row', function(row) {
+      row1 = row;
+      console.log(JSON.stringify(row));
+    });
+});
 
 const pool = new Pool({
   user: 'postgres',
@@ -44,6 +57,7 @@ app.get('/postage', function(req, res) {
 });
 
 app.get('/getUser', function(req, response){
+  response.send(row1);
 	var email = req.query.username;
   console.log('Email:', email);
 	if (email) {
@@ -60,10 +74,10 @@ app.get('/getUser', function(req, response){
       if (err) throw err;
       console.log('Connected to postgres! Getting schemas...');
 
-      console.log(client.query('SELECT * FROM card WHERE email = \';' + email + '\''));//.on('row', function(row) {
-//            console.log(JSON.stringify(row));
-//            response.render('pages/start');
-//          });
+      client.query('SELECT * FROM card WHERE email = \';' + email + '\'').on('row', function(row) {
+            console.log(JSON.stringify(row));
+            response.render('pages/start');
+          });
       });
     } else {
 		// pool.query('SELECT * FROM card WHERE id = 2', (err, res) => {
@@ -79,12 +93,12 @@ app.get('/getUser', function(req, response){
       if (err) throw err;
       console.log('Connected to postgres! Getting schemas...');
 
-    console.log(client.query('SELECT * FROM card WHERE id = 1;'));//.on('row', function(row) {
-  //     id = 1;
-  //     console.log(JSON.stringify(row));
-  //     response.render('pages/start');
-  //   });
+    client.query('SELECT * FROM card WHERE id = 1;').on('row', function(row) {
+      id = 1;
+      console.log(JSON.stringify(row));
+      response.render('pages/start');
     });
+  });
 	}
 });
 
