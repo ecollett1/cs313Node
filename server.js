@@ -57,7 +57,7 @@ app.get('/postage', function(req, res) {
 });
 
 app.get('/getUser', function(req, response){
-  response.send('pages/start', row1);
+  response.render('pages/start', row1);
 	var email = req.query.username;
   console.log('Email:', email);
 	if (email) {
