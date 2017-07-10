@@ -84,7 +84,7 @@ app.get('/getUser', function(req, response){
   //     console.log(JSON.stringify(row));
   //     response.render('pages/start');
   //   });
-  // });
+    });
 	}
 });
 
