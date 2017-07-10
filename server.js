@@ -41,7 +41,6 @@ app.set('view engine', 'ejs');
 
 app.get('/', function (request, response) {
     response.sendFile(__dirname + '/public/home.html');
-    response.end();
 });
 
 app.get('/letter', function(request, response) {
