@@ -5,7 +5,6 @@ var postage = require('./postage.js');
 const { Pool } = require('pg');
 var id;
 var pg = require('pg');
-var connectionString = "postgres://*ericmichaelcollett@gmail.com*:*sh0m0mm@*@*ec2-23-21-220-188.compute-1.amazonaws.com*:*5432";
 
 pg.defaults.ssl = true;
 
@@ -28,8 +27,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
 app.get('/', function (request, response) {
-    response.render('pages/start');
-    response.end();
+    response.sendFile(__dirname + '/public/home.html');
 });
 
 app.get('/letter', function(request, response) {
@@ -65,7 +63,6 @@ app.get('/getUser', function(req, response){
       client.query('SELECT * FROM card WHERE email = \'' + email + '\'').on('row', function(row) {
             console.log(JSON.stringify(row));
             response.render('pages/start');
-            response.end();
           });
       });
     } else {
@@ -86,7 +83,6 @@ app.get('/getUser', function(req, response){
       id = 1;
       console.log(JSON.stringify(row));
       response.render('pages/start');
-      response.end();
     });
   });
 	}
