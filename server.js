@@ -60,7 +60,7 @@ app.get('/getUser', function(req, response){
       if (err) throw err;
       console.log('Connected to postgres! Getting schemas...');
 
-      client.query('SELECT * FROM card WHERE email = \'' + email + '\'').on('row', function(row) {
+      client.query('SELECT * FROM card WHERE email = \';' + email + '\'').on('row', function(row) {
             console.log(JSON.stringify(row));
             response.render('pages/start');
           });
@@ -79,7 +79,7 @@ app.get('/getUser', function(req, response){
       if (err) throw err;
       console.log('Connected to postgres! Getting schemas...');
 
-    client.query('SELECT * FROM card WHERE id = 1').on('row', function(row) {
+    client.query('SELECT * FROM card WHERE id = 1;').on('row', function(row) {
       id = 1;
       console.log(JSON.stringify(row));
       response.render('pages/start');
