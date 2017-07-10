@@ -41,10 +41,12 @@ app.set('view engine', 'ejs');
 
 app.get('/', function (request, response) {
     response.sendFile(__dirname + '/public/home.html');
+    response.end();
 });
 
 app.get('/letter', function(request, response) {
   	response.sendFile(__dirname + '/public/letter.html');
+    response.end();
 });
 
 app.get('/postage', function(req, res) {
@@ -53,11 +55,13 @@ app.get('/postage', function(req, res) {
 
 	postage.calculateRate(weight, type, function(error, results) {
 		res.render("pages/results", results);
+    res.end();
 	});
 });
 
 app.get('/getUser', function(req, response){
   response.render('pages/start', row1);
+  response.end();
 	// var email = req.query.username;
   // console.log('Email:', email);
 	// if (email) {
