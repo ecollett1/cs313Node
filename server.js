@@ -22,6 +22,10 @@ var row1;
 //     });
 // });
 
+
+// This will work locally, but not at Heroku. We need something like the following:
+// https://github.com/brianc/node-pg-pool#note
+/*
 const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
@@ -29,6 +33,40 @@ const pool = new Pool({
   password: 'sh0m0mm@',
   port: 5432
 });
+*/
+
+// Default database configuration options. For localhost!
+var config = {
+  user: 'postgres',
+  host: 'localhost',
+  database: 'businesscard',
+  password: 'sh0m0mm@',
+  port: 5432
+};
+
+// Require the URL module for parsing the DATABASE_URL environment variable.
+const url = require('url');
+
+// Check to see if we're running out at Heroku...
+if (process.env.DATABASE_URL) {
+  // Parse that sucker.
+  var params = url.parse(process.env.DATABASE_URL);
+  var auth   = params.auth.split(':');
+
+  // Assign new values to the existing config object.
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
+  Object.assign(config, {
+    user:     auth[0],
+    password: auth[1],
+    host:     params.hostname,
+    port:     params.port,
+    database: params.pathname.split('/')[1],
+    ssl:      true // Required for Heroku, but not localhost!
+  });
+}
+
+// Now we've got a pool that ought to work regardless of our environment.
+const pool = new Pool(config);
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -38,7 +76,10 @@ app.use(bodyParser.urlencoded({ extended: true}));
 
 // views is directory for all template files
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, '/views'));
+app.set('views', path.join(__dirname, '/views')); // Good! It wouldn't hurt to
+                                                  // do this for the other
+                                                  // __dirname + path lines,
+                                                  // for consistency's sake.
 
 app.get('/', function (request, response) {
     response.sendFile(__dirname + '/public/home.html');
@@ -59,7 +100,9 @@ app.get('/postage', function(req, res) {
 
 // Postgres getUser
 app.get('/getUser', function(req, response){
-  response.send(row1);
+  // Sending the row here will give you "Cannot modify headers after already
+  // sent" error. That's a fatal one, which is partly why your page won't load.
+  //response.send(row1);
 	var email = req.query.username;
   console.log('Email:', email);
 	if (email) {
@@ -82,14 +125,26 @@ app.get('/getUser', function(req, response){
     //       });
     //   });
     } else {
-		pool.query('SELECT * FROM card WHERE id = 2', (err, res) => {
+    // I don't have card #2 in the database.sql file, so I changed this to card #1.
+		pool.query('SELECT * FROM card WHERE id = 1', (err, res) => {
 	  	if (err) {
 	    	throw err;
 	  	}
-      id = 2;
+
 		console.log('Card:', res.rows[0]);
-		response.render('pages/start', res.rows[0]);
-		response.end();
+    // For reference, Object.assign copies the properties of all arguments onto
+    // the first argument. What I'm doing here is making a new object that has
+    // the properties from the first row returned by your query, plus the
+    // additional "company" property that your pages/start.ejs template expects
+    // but that the database is missing.
+    // Modifying the result of a database operation in-place can cause confusion
+    // while debugging, so I'm basically making a copy instead!
+		response.render('pages/start', Object.assign({}, res.rows[0], {
+      company: 'This is missing in the database :('
+    }));
+
+    // Not technically necessary after response.render.
+		// response.end();
 		});
   //   pg.connect(process.env.DATABASE_URL, function(err, client) {
   //     if (err) throw err;
@@ -106,6 +161,11 @@ app.get('/getUser', function(req, response){
 
 // Heroku postgres
 app.get('/getUser', function(req, response){
+  // Is this ever executed?
+  console.log('I don\'t think this ever appears...');
+  // You've got two routes for GET /getUser, and the first one intercepts and
+  // terminates requests long before this logic is ever executed.
+
   response.send(row1);
 	var email = req.query.username;
   console.log('Email:', email);
