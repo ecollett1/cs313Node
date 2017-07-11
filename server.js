@@ -3,23 +3,24 @@ var app = express();
 var bodyParser = require('body-parser');
 var postage = require('./postage.js');
 const { Pool } = require('pg');
+const path = require('path');
 var id;
 var pg = require('pg');
 
-pg.defaults.ssl = true;
+// pg.defaults.ssl = true;
 var row1;
 
-pg.connect(process.env.DATABASE_URL, function(err, client) {
-  if (err) throw err;
-  console.log('Connected to postgres! Getting schemas...');
-
-  client
-    .query('SELECT * FROM card WHERE id = 1;')
-    .on('row', function(row) {
-      row1 = row;
-      console.log(JSON.stringify(row));
-    });
-});
+// pg.connect(process.env.DATABASE_URL, function(err, client) {
+//   if (err) throw err;
+//   console.log('Connected to postgres! Getting schemas...');
+//
+//   client
+//     .query('SELECT *FROM card WHERE id = 1;')
+//     .on('row', function(row) {
+//       row1 = row;
+//       console.log(JSON.stringify(row));
+//     });
+// });
 
 const pool = new Pool({
   user: 'postgres',
@@ -36,8 +37,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true}));
 
 // views is directory for all template files
-app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '/views'));
 
 app.get('/', function (request, response) {
     response.sendFile(__dirname + '/public/home.html');
@@ -45,7 +46,6 @@ app.get('/', function (request, response) {
 
 app.get('/letter', function(request, response) {
   	response.sendFile(__dirname + '/public/letter.html');
-    response.end();
 });
 
 app.get('/postage', function(req, res) {
@@ -54,43 +54,43 @@ app.get('/postage', function(req, res) {
 
 	postage.calculateRate(weight, type, function(error, results) {
 		res.render("pages/results", results);
-    res.end();
 	});
 });
 
+// Postgres getUser
 app.get('/getUser', function(req, response){
-  response.render('pages/start');
-	// var email = req.query.username;
-  // console.log('Email:', email);
-	// if (email) {
-	// 	// pool.query('SELECT * FROM card WHERE email = \'' + email + '\'', (err, res) => {
-	//   // 	if (err) {
-	//   //   	throw err;
-	//   // 	}
-  //   //   id = res.rows[0].id;
-	// 	// console.log('User Information:', res.rows[0]);
-  //   // response.render('pages/start', res.rows[0]);
-	// 	// response.end();
-	// 	// });
-  //   pg.connect(process.env.DATABASE_URL, function(err, client) {
-  //     if (err) throw err;
-  //     console.log('Connected to postgres! Getting schemas...');
-  //
-  //     client.query('SELECT * FROM card WHERE email = \';' + email + '\'').on('row', function(row) {
-  //           console.log(JSON.stringify(row));
-  //           response.render('pages/start');
-  //         });
-  //     });
-  //   } else {
-	// 	// pool.query('SELECT * FROM card WHERE id = 2', (err, res) => {
-	//   // 	if (err) {
-	//   //   	throw err;
-	//   // 	}
-  //   //   id = 2;
-	// 	// console.log('Card:', res.rows[0]);
-	// 	// response.render('pages/start', res.rows[0]);
-	// 	// response.end();
-	// 	// });
+  response.send(row1);
+	var email = req.query.username;
+  console.log('Email:', email);
+	if (email) {
+		pool.query('SELECT * FROM card WHERE email = \'' + email + '\'', (err, res) => {
+	  	if (err) {
+	    	throw err;
+	  	}
+      id = res.rows[0].id;
+		console.log('User Information:', res.rows[0]);
+    response.render('pages/start', res.rows[0]);
+		response.end();
+		});
+    // pg.connect(process.env.DATABASE_URL, function(err, client) {
+    //   if (err) throw err;
+    //   console.log('Connected to postgres! Getting schemas...');
+    //
+    //   client.query('SELECT * FROM card WHERE email = \';' + email + '\'').on('row', function(row) {
+    //         console.log(JSON.stringify(row));
+    //         response.render('pages/start');
+    //       });
+    //   });
+    } else {
+		pool.query('SELECT * FROM card WHERE id = 2', (err, res) => {
+	  	if (err) {
+	    	throw err;
+	  	}
+      id = 2;
+		console.log('Card:', res.rows[0]);
+		response.render('pages/start', res.rows[0]);
+		response.end();
+		});
   //   pg.connect(process.env.DATABASE_URL, function(err, client) {
   //     if (err) throw err;
   //     console.log('Connected to postgres! Getting schemas...');
@@ -101,7 +101,36 @@ app.get('/getUser', function(req, response){
   //     response.render('pages/start');
   //   });
   // });
-	// }
+	}
+});
+
+// Heroku postgres
+app.get('/getUser', function(req, response){
+  response.send(row1);
+	var email = req.query.username;
+  console.log('Email:', email);
+	if (email) {
+    pg.connect(process.env.DATABASE_URL, function(err, client) {
+      if (err) { throw err };
+      console.log('Connected to postgres! Getting schemas...');
+
+      client.query('SELECT * FROM card WHERE email = \';' + email + '\'').on('row', function(row) {
+            console.log(JSON.stringify(row));
+            response.render('pages/start');
+          });
+      });
+    } else {
+    pg.connect(process.env.DATABASE_URL, function(err, client) {
+      if (err) { throw err };
+      console.log('Connected to postgres! Getting schemas...');
+
+    client.query('SELECT * FROM card WHERE id = 1;').on('row', function(row) {
+      id = 1;
+      console.log(JSON.stringify(row));
+      response.render('pages/start');
+    });
+  });
+	}
 });
 
 app.get('/editUser', function(req, response){
