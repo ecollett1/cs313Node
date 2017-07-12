@@ -4,11 +4,8 @@ var bodyParser = require('body-parser');
 var postage = require('./postage.js');
 const { Pool } = require('pg');
 const path = require('path');
-var id;
+var email;
 var pg = require('pg');
-
-// pg.defaults.ssl = true;
-var row1;
 
 // Default database configuration options. For localhost!
 var config = {
@@ -72,81 +69,69 @@ app.get('/postage', function(req, res) {
 
 // Postgres getUser
 app.get('/getUser', function(req, response){
-	var email = req.query.username;
+  console.log(req.query.username);
+	if (req.query.username != null) {
+    email = req.query.username;
+  }
   console.log('Email:', email);
 	if (email) {
 		pool.query('SELECT * FROM card WHERE email = \'' + email + '\'', (err, res) => {
 	  	if (err) {
 	    	throw err;
 	  	}
-      id = res.rows[0].id;
-		console.log('User Information:', res.rows[0]);
-    response.render('pages/start', res.rows[0]);
-		response.end();
+  		console.log('User Information:', res.rows[0]);
+      response.render('pages/start', res.rows[0]);
 		});
-    // pg.connect(process.env.DATABASE_URL, function(err, client) {
-    //   if (err) throw err;
-    //   console.log('Connected to postgres! Getting schemas...');
-    //
-    //   client.query('SELECT * FROM card WHERE email = \';' + email + '\'').on('row', function(row) {
-    //         console.log(JSON.stringify(row));
-    //         response.render('pages/start');
-    //       });
-    //   });
     } else {
 		pool.query('SELECT * FROM card WHERE id = 1', (err, res) => {
 	  	if (err) {
 	    	throw err;
 	  	}
-		console.log('Card:', res.rows[0]);
-		response.render('pages/start', Object.assign({}, res.rows[0]));
+      email = res.rows[0].email;
+      console.log(email);
+  		console.log('Card:', res.rows[0]);
+  		response.render('pages/start', Object.assign({}, res.rows[0]));
 		});
-  //   pg.connect(process.env.DATABASE_URL, function(err, client) {
-  //     if (err) throw err;
-  //     console.log('Connected to postgres! Getting schemas...');
-  //
-  //   client.query('SELECT * FROM card WHERE id = 1;').on('row', function(row) {
-  //     id = 1;
-  //     console.log(JSON.stringify(row));
-  //     response.render('pages/start');
-  //   });
-  // });
 	}
 });
 
 app.get('/editUser', function(req, response){
-  console.log('ID:', id);
-	if (id) {
+  console.log('Email:', email);
+  email = req.query.email;
+	if (email) {
     pool.query('UPDATE card SET name = \'' + req.query.name
-     + '\', position = \'' + req.query.business
+     + '\', position = \'' + req.query.position
      + '\', phone = \'' + req.query.phone
      + '\', company = \'' + req.query.company
      + '\', address = \'' + req.query.address
      + '\', fax = \'' + req.query.fax
-     + '\' WHERE id = ' + id, (err, res) => {
+     + '\' WHERE email = \'' + email + '\';', (err, res) => {
 	  	if (err) {
 	    	throw err;
 	  	}
 
-		console.log('Card:', req.query);
-		response.render('pages/start', req.query);
-		response.end();
+  		console.log('Card:', req.query);
+  		response.render('pages/start', req.query);
+  		response.end();
 		});
 	} else {
-		pool.query('UPDATE card SET name = \'' + req.query.name
-     + '\', position = \'' + req.query.business
-     + '\', phone = \'' + req.query.phone
-     + '\', company = \'' + req.query.company
-     + '\', address = \'' + req.query.address
-     + '\', fax = \'' + req.query.fax
-     + '\' WHERE email = \'' + req.query.email + '\'', (err, res) => {
+		pool.query('INSERT INTO card(email, position, name, phone, address, fax, templateid, company) VALUES ('
+     + '\', \'' + req.query.email
+     + '\', \'' + req.query.position
+     + '\', \'' + req.query.name
+     + '\', \'' + req.query.phone
+     + '\', \'' + req.query.address
+     + '\', \'' + req.query.fax
+     + ', 1'
+     + ', \'' + req.query.company
+     + '\';', (err, res) => {
 	  	if (err) {
 	    	throw err;
 	  	}
-
-		console.log('Card:', req.query);
-    response.render('pages/start', req.query);
-		response.end();
+      email = req.query.email;
+  		console.log('Card:', req.query);
+      response.render('pages/start', req.query);
+  		response.end();
   });
 	}
 });

@@ -37,6 +37,7 @@ p {
     bottom: 229px;
     right: 96px;
     width: 140px;
+    height: 24px;
     font-size: 20px;
     background-color: white;
     font-weight: bold;
@@ -47,6 +48,7 @@ p {
     bottom: 213px;
     right: 136px;
     width: 100px;
+    height: 20px;
     font-size: 14px;
     background-color: white;
 }
@@ -85,6 +87,7 @@ p {
     bottom: 33px;
     right: 36px;
     width: 200px;
+    height: 20px;
     font-size: 18px;
     background-color: white;
     float: left;
@@ -95,7 +98,9 @@ p {
     bottom: 135px;
     right: 266px;
     width: 200px;
+    height: 28px;
     font-weight: bold;
+    text-align: center;
     font-size: 24px;
     background-color: white;
     color: #410041;
