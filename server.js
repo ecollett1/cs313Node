@@ -97,7 +97,6 @@ app.get('/getUser', function(req, response){
 
 app.get('/editUser', function(req, response){
   console.log('Email:', email);
-  email = req.query.email;
 	if (email) {
     pool.query('UPDATE card SET name = \'' + req.query.name
      + '\', position = \'' + req.query.position
