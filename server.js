@@ -77,68 +77,71 @@ app.get('/getUser', function(req, response){
 	if (email) {
 		pool.query('SELECT * FROM card WHERE email = \'' + email + '\'', (err, res) => {
 	  	if (err) {
-        email = "johndoe@gmail.com";
-	    	throw err;
-	  	}
-  		console.log('User Information:', res.rows[0]);
-      response.render('pages/start', res.rows[0]);
-		});
-  } else {
-		pool.query('SELECT * FROM card WHERE id = 1', (err, res) => {
-	  	if (err) {
-        email = "johndoe@gmail.com";
-	    	throw err;
-	  	}
-      email = res.rows[0].email;
-      console.log(email);
-  		console.log('Card:', res.rows[0]);
-  		response.render('pages/start', Object.assign({}, res.rows[0]));
-		});
-	}
+        pool.query('SELECT * FROM card WHERE id = 1', (err, res) => {
+    	  	if (err) {
+    	    	throw err;
+    	  	}
+          email = res.rows[0].email;
+          console.log(email);
+      		console.log('Card:', res.rows[0]);
+      		response.render('pages/start', Object.assign({}, res.rows[0]));
+    		});
+	  	} else {
+  		  console.log('User Information:', res.rows[0]);
+        response.render('pages/start', res.rows[0]);
+		  }
+    });
+      } else {
+		      pool.query('SELECT * FROM card WHERE id = 1', (err, res) => {
+	  	      if (err) {
+	    	      throw err;
+  	  	    }
+            email = res.rows[0].email;
+            console.log(email);
+    		    console.log('Card:', res.rows[0]);
+    		    response.render('pages/start', Object.assign({}, res.rows[0]));
+  		    });
+	   }
 });
 
 app.get('/editUser', function(req, response){
   console.log('Email:', email);
-  if (email == 'johndoe@gmail.com' && req.query.email != 'johndoe@gmail.com') {
-    email = null;
-  }
-	if (email) {
-    pool.query('UPDATE card SET name = \'' + req.query.name
-     + '\', position = \'' + req.query.position
-     + '\', phone = \'' + req.query.phone
-     + '\', company = \'' + req.query.company
-     + '\', address = \'' + req.query.address
-     + '\', fax = \'' + req.query.fax
-     + '\' WHERE email = \'' + email + '\';', (err, res) => {
-	  	if (err) {
-        email = "johndoe@gmail.com";
-	    	throw err;
-	  	}
+  email = req.query.email;
 
-  		console.log('Card:', req.query);
-  		response.render('pages/start', req.query);
-		});
-	} else {
-    alert('Inserting...');
-		pool.query('INSERT INTO card(email, position, name, phone, address, fax, templateid, company) VALUES ('
-     + '\', \'' + req.query.email
-     + '\', \'' + req.query.position
-     + '\', \'' + req.query.name
-     + '\', \'' + req.query.phone
-     + '\', \'' + req.query.address
-     + '\', \'' + req.query.fax
-     + ', 1'
-     + ', \'' + req.query.company
-     + '\';', (err, res) => {
-	  	if (err) {
-        email = "johndoe@gmail.com";
-	    	throw err;
-	  	}
-      email = req.query.email;
-  		console.log('Card:', req.query);
-      response.render('pages/start', req.query);
+  pool.query('SELECT * FROM card WHERE email = \'' + email + '\'', (err, res) => {
+    if (res.rows[0].email == null) {
+      pool.query('INSERT INTO card(email, position, name, phone, address, fax, templateid, company) VALUES ('
+       + '\', \'' + req.query.email
+       + '\', \'' + req.query.position
+       + '\', \'' + req.query.name
+       + '\', \'' + req.query.phone
+       + '\', \'' + req.query.address
+       + '\', \'' + req.query.fax
+       + ', 1'
+       + ', \'' + req.query.company
+       + '\';', (err, res) => {
+  	  	if (err) {
+  	    	throw err;
+  	  	}
+    		console.log('Card:', req.query);
+        response.render('pages/start', req.query);
+      });
+    } else {
+      pool.query('UPDATE card SET name = \'' + req.query.name
+       + '\', position = \'' + req.query.position
+       + '\', phone = \'' + req.query.phone
+       + '\', company = \'' + req.query.company
+       + '\', address = \'' + req.query.address
+       + '\', fax = \'' + req.query.fax
+       + '\' WHERE email = \'' + email + '\';', (err, res) => {
+  	  	if (err) {
+  	    	throw err;
+  	  	}
+    		console.log('Card:', req.query);
+    		response.render('pages/start', req.query);
+  		});
+    }
   });
-	}
 });
 
 app.listen(app.get('port'), function() {
