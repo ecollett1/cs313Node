@@ -105,21 +105,22 @@ app.get('/getUser', function(req, response){
 });
 
 app.get('/editUser', function(req, response){
-  console.log('Email:', email);
   email = req.query.email;
+  console.log('Email:', email);
 
-  pool.query('SELECT * FROM card WHERE email = \'' + email + '\'', (err, res) => {
-    if (res.rows[0].email == null) {
+  pool.query('SELECT * FROM card WHERE email = \'' + email + '\';', (err, res) => {
+    console.log(res.rows[0] == null);
+    if (res.rows[0] == null) {
       pool.query('INSERT INTO card(email, position, name, phone, address, fax, templateid, company) VALUES ('
-       + '\', \'' + req.query.email
+       + '\'' + req.query.email
        + '\', \'' + req.query.position
        + '\', \'' + req.query.name
        + '\', \'' + req.query.phone
        + '\', \'' + req.query.address
        + '\', \'' + req.query.fax
-       + ', 1'
+       + '\', 1'
        + ', \'' + req.query.company
-       + '\';', (err, res) => {
+       + '\');', (err, res) => {
   	  	if (err) {
   	    	throw err;
   	  	}
