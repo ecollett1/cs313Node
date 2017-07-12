@@ -82,7 +82,7 @@ app.get('/getUser', function(req, response){
   		console.log('User Information:', res.rows[0]);
       response.render('pages/start', res.rows[0]);
 		});
-    } else {
+  } else {
 		pool.query('SELECT * FROM card WHERE id = 1', (err, res) => {
 	  	if (err) {
 	    	throw err;
@@ -97,7 +97,7 @@ app.get('/getUser', function(req, response){
 
 app.get('/editUser', function(req, response){
   console.log('Email:', email);
-  if (email = 'johndoe@gmail.com' && req.query.email != 'johndoe@gmail.com') {
+  if (email == 'johndoe@gmail.com' && req.query.email != 'johndoe@gmail.com') {
     email = null;
   }
 
