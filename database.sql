@@ -8,7 +8,7 @@ CREATE TABLE template
 	business BOOLEAN NOT NULL
 );
 
-CREATE TABLE card 
+CREATE TABLE card
 (
 	id SERIAL PRIMARY KEY,
 	email VARCHAR(100) NOT NULL,
@@ -17,6 +17,7 @@ CREATE TABLE card
 	phone VARCHAR(45) NOT NULL,
 	address VARCHAR(100),
 	fax VARCHAR(45),
+	company VARCHAR(100) NOT NULL,
 	templateid INT NOT NULL references template(id)
 );
 
@@ -26,5 +27,5 @@ VALUES (true, false);
 INSERT INTO template(normal, business)
 VALUES (false, true);
 
-INSERT INTO card(email, position, name, phone, address, fax, templateid) 
+INSERT INTO card(email, position, name, phone, address, fax, templateid)
 VALUES ('johndoe@gmail.com', 'corpse', 'John Doe', '(555)123-4567', '111 Doe Lane, Rexburg Idaho, 83440', '(123)456-7890', 1);
