@@ -100,6 +100,7 @@ app.get('/editUser', function(req, response){
   if (email = 'johndoe@gmail.com' && req.query.email != 'johndoe@gmail.com') {
     email = null;
   }
+
 	if (email) {
     pool.query('UPDATE card SET name = \'' + req.query.name
      + '\', position = \'' + req.query.position
@@ -114,7 +115,6 @@ app.get('/editUser', function(req, response){
 
   		console.log('Card:', req.query);
   		response.render('pages/start', req.query);
-  		response.end();
 		});
 	} else {
 		pool.query('INSERT INTO card(email, position, name, phone, address, fax, templateid, company) VALUES ('
@@ -133,7 +133,6 @@ app.get('/editUser', function(req, response){
       email = req.query.email;
   		console.log('Card:', req.query);
       response.render('pages/start', req.query);
-  		response.end();
   });
 	}
 });
