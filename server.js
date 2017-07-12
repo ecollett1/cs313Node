@@ -77,6 +77,7 @@ app.get('/getUser', function(req, response){
 	if (email) {
 		pool.query('SELECT * FROM card WHERE email = \'' + email + '\'', (err, res) => {
 	  	if (err) {
+        email = "johndoe@gmail.com";
 	    	throw err;
 	  	}
   		console.log('User Information:', res.rows[0]);
@@ -85,6 +86,7 @@ app.get('/getUser', function(req, response){
   } else {
 		pool.query('SELECT * FROM card WHERE id = 1', (err, res) => {
 	  	if (err) {
+        email = "johndoe@gmail.com";
 	    	throw err;
 	  	}
       email = res.rows[0].email;
@@ -109,6 +111,7 @@ app.get('/editUser', function(req, response){
      + '\', fax = \'' + req.query.fax
      + '\' WHERE email = \'' + email + '\';', (err, res) => {
 	  	if (err) {
+        email = "johndoe@gmail.com";
 	    	throw err;
 	  	}
 
@@ -128,6 +131,7 @@ app.get('/editUser', function(req, response){
      + ', \'' + req.query.company
      + '\';', (err, res) => {
 	  	if (err) {
+        email = "johndoe@gmail.com";
 	    	throw err;
 	  	}
       email = req.query.email;
